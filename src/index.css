@@ -6,3 +6,8 @@
   font-family: "Inter";
   src: url("/src/assets/fonts/Inter/Inter-Regular.ttf");
 }
+
+@font-face {
+  font-family: "Yekan";
+  src: url("/src/assets/fonts/iranyekan/Qs_Iranyekan.ttf");
+}

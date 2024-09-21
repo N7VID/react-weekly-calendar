@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         Inter: ["Inter", "sans"],
+        Yekan: ["Yekan", "sans"],
       },
     },
   },
