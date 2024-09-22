@@ -34,12 +34,19 @@ export default function Calendar() {
     setCurrentDate(currentDate.subtract(1, "week"));
   };
 
+  const toPersianDigits = (str: string): string => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return str.replace(/\d/g, (d: string) => persianDigits[parseInt(d, 10)]);
+  };
+
   return (
     <div className="flex flex-col justify-center shadow-sm shadow-[#333] rounded-lg p-4 bg-white">
       <div className="border-b-2 border-gray-300 pb-4 px-4 flex justify-between items-center gap-8">
         <span className="text-lg text-gray-700">
           {language === "jalali"
-            ? currentDate.calendar("jalali").locale("fa").year()
+            ? toPersianDigits(
+                currentDate.calendar("jalali").locale("fa").year().toString()
+              )
             : currentDate.year()}
         </span>
         <h4 className="text-2xl font-semibold text-gray-800">
@@ -84,7 +91,9 @@ export default function Calendar() {
                 }
               >
                 {language === "jalali"
-                  ? day.calendar("jalali").locale("fa").format("D")
+                  ? toPersianDigits(
+                      day.calendar("jalali").locale("fa").format("D")
+                    )
                   : day.format("D")}
               </div>
             </div>
@@ -108,18 +117,16 @@ export default function Calendar() {
       />
 
       {selectedDay && (
-        <div className="mt-6 p-4 bg-gray-100 rounded-lg text-center">
-          <h3 className="text-xl font-semibold">
-            {language === "jalali"
-              ? "اطلاعات روز انتخاب شده"
-              : "Information of Selected day"}
-          </h3>
+        <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+          <h3 className="text-xl font-semibold">اطلاعات روز انتخاب‌شده:</h3>
           <p>
             {language === "jalali"
-              ? selectedDay
-                  .calendar("jalali")
-                  .locale("fa")
-                  .format("dddd, D MMMM YYYY")
+              ? toPersianDigits(
+                  selectedDay
+                    .calendar("jalali")
+                    .locale("fa")
+                    .format("dddd, D MMMM YYYY")
+                )
               : selectedDay.format("dddd, D MMMM YYYY")}
           </p>
         </div>
