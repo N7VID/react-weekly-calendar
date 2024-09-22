@@ -1,51 +1,49 @@
 import { useState } from "react";
 import Pagination from "../Pagination/Pagination";
+import dayjs from "dayjs";
+import jalaliday from "jalaliday";
+import Switch from "../Switch/Switch";
+
+dayjs.extend(jalaliday);
 
 export default function Calendar() {
-  const jalaliDays: string[] = [
-    "شنبه",
-    "یکشنبه",
-    "دوشنبه",
-    "سه شنبه",
-    "چهارشنبه",
-    "پنجشنبه",
-    "جمعه",
-  ];
-
-  const gregorianDays: string[] = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
   const [language, setLanguage] = useState<"jalali" | "gregorian">("jalali");
-  const days = language === "jalali" ? jalaliDays : gregorianDays;
+  const [currentDate, setCurrentDate] = useState(dayjs());
+
+  const getWeekDays = () => {
+    const startOfWeek = currentDate.startOf("week");
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      days.push(startOfWeek.add(i, "day"));
+    }
+    return days;
+  };
+  const days = getWeekDays();
+
+  const goToNextWeek = () => {
+    setCurrentDate(currentDate.add(1, "week"));
+  };
+
+  const goToPreviousWeek = () => {
+    setCurrentDate(currentDate.subtract(1, "week"));
+  };
 
   return (
     <div className="flex flex-col justify-center border-2 border-black rounded-lg p-4">
       <div className="border-b-2 border-black pb-4 px-4 flex justify-between items-center">
         <span className="text-lg">
-          {language === "jalali" ? "1403" : "2024"}
+          {language === "jalali"
+            ? currentDate.calendar("jalali").locale("fa").year()
+            : currentDate.year()}
         </span>
         <h4 className="text-xl">
-          {" "}
           {language === "jalali" ? "تقویم جلالی" : "Gregorian Calendar"}
         </h4>
         <span className="text-lg">
-          {language === "jalali" ? "شهریور" : "September"}
+          {language === "jalali"
+            ? currentDate.calendar("jalali").locale("fa").format("MMMM")
+            : currentDate.format("MMMM")}
         </span>
-        <button
-          onClick={() =>
-            setLanguage(language === "jalali" ? "gregorian" : "jalali")
-          }
-          className="ml-4 bg-blue-500 text-white px-2 text-sm py-1 rounded"
-        >
-          {language === "jalali" ? "Switch to Gregorian" : "تغییر به جلالی"}
-        </button>
       </div>
 
       <div className="grid grid-cols-12 gap-y-4 gap-x-6 py-4">
@@ -54,12 +52,31 @@ export default function Calendar() {
             key={index}
             className="flex justify-center items-center flex-col border-2 border-black rounded-md w-20 h-20 col-span-6 md:col-span-3"
           >
-            <div>{day}</div>
-            <div>تاریخ</div>{" "}
+            <div>
+              {language === "jalali"
+                ? day.calendar("jalali").locale("fa").format("dddd")
+                : day.format("dddd")}
+            </div>
+            <div>
+              {language === "jalali"
+                ? day.calendar("jalali").locale("fa").format("D")
+                : day.format("D")}
+            </div>
           </div>
         ))}
       </div>
-      <Pagination />
+      <div className="flex justify-center">
+        <Switch
+          onClick={() =>
+            setLanguage(language === "jalali" ? "gregorian" : "jalali")
+          }
+          language={language}
+        />
+      </div>
+      <Pagination
+        goToPreviousWeek={goToPreviousWeek}
+        goToNextWeek={goToNextWeek}
+      />
     </div>
   );
 }
