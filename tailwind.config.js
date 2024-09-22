@@ -4,8 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        Inter: ["Inter", "sans"],
-        Yekan: ["Yekan", "sans"],
+        Yekan: ["Yekan", "Inter"],
       },
     },
   },
