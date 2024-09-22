@@ -117,8 +117,12 @@ export default function Calendar() {
       />
 
       {selectedDay && (
-        <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-          <h3 className="text-xl font-semibold">اطلاعات روز انتخاب‌شده:</h3>
+        <div className="mt-6 p-4 bg-gray-100 rounded-lg text-center">
+          <h3 className="text-xl font-semibold">
+            {language === "jalali"
+              ? "اطلاعات روز انتخاب شده"
+              : "Information of selected day"}
+          </h3>
           <p>
             {language === "jalali"
               ? toPersianDigits(
