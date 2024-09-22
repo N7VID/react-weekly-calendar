@@ -8,7 +8,7 @@ interface Iprops {
 
 export default function Pagination({ goToPreviousWeek, goToNextWeek }: Iprops) {
   return (
-    <div className="border-t-2 border-black pb-4 pt-3 px-4 text-center flex justify-between items-center">
+    <div className="border-t-2 border-gray-300 pb-4 pt-3 px-4 text-center flex justify-between items-center">
       <div
         className="flex justify-center items-center gap-2 cursor-pointer"
         onClick={goToPreviousWeek}
