@@ -9,13 +9,14 @@ dayjs.extend(jalaliday);
 export default function Calendar() {
   const [language, setLanguage] = useState<"jalali" | "gregorian">("jalali");
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const today = dayjs(); // روز کنونی
+  const [selectedDay, setSelectedDay] = useState<dayjs.Dayjs | null>(null);
+  const today = dayjs();
 
   const getWeekDays = () => {
     const startOfWeek =
       language === "jalali"
-        ? currentDate.startOf("week").subtract(1, "day") // برای جلالی
-        : currentDate.startOf("week"); // برای میلادی
+        ? currentDate.startOf("week").subtract(1, "day")
+        : currentDate.startOf("week");
     const days = [];
     for (let i = 0; i < 7; i++) {
       days.push(startOfWeek.add(i, "day"));
@@ -61,6 +62,7 @@ export default function Calendar() {
           return (
             <div
               key={index}
+              onClick={() => setSelectedDay(day)}
               className={`flex justify-center items-center flex-col border-2 rounded-md px-3 py-3 col-span-6 md:col-span-3 cursor-pointer
               ${isToday ? "border-blue-500 bg-blue-100" : "border-gray-300"}
               hover:bg-blue-50`}
@@ -102,7 +104,26 @@ export default function Calendar() {
       <Pagination
         goToPreviousWeek={goToPreviousWeek}
         goToNextWeek={goToNextWeek}
+        language={language}
       />
+
+      {selectedDay && (
+        <div className="mt-6 p-4 bg-gray-100 rounded-lg text-center">
+          <h3 className="text-xl font-semibold">
+            {language === "jalali"
+              ? "اطلاعات روز انتخاب شده"
+              : "Information of Selected day"}
+          </h3>
+          <p>
+            {language === "jalali"
+              ? selectedDay
+                  .calendar("jalali")
+                  .locale("fa")
+                  .format("dddd, D MMMM YYYY")
+              : selectedDay.format("dddd, D MMMM YYYY")}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
